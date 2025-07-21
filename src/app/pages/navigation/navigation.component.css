@@ -1,0 +1,247 @@
+/* Full screen layout fix */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding-top: 56px; /* space for navbar */
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Fix map height to fill available space */
+#map {
+  flex: 1;
+  width: 100%;
+  z-index: 1;
+}
+
+/* Navbar logo */
+.app-logo {
+  height: 32px;
+  width: 32px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+/* Locate Me button */
+.locate-btn {
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  z-index: 1000;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background-color: #198754;
+  color: white;
+  border: none;
+}
+
+.locate-btn:hover {
+  background-color: #146c43;
+}
+
+/* AR Switch */
+.switch-ar-btn {
+  position: absolute;
+  top: 120px;
+  right: 20px;
+  z-index: 1000;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+}
+
+.switch-ar-btn:hover {
+  background-color: #0b5ed7;
+}
+
+/* Location dropdown */
+.location-tools {
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  margin: 15px auto;
+  max-width: 420px;
+  z-index: 1000;
+}
+
+/* Reset button */
+button.btn-outline-secondary {
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+/* Routing panel styling */
+/*.leaflet-routing-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  padding: 12px;
+  font-size: 14px;
+  color: #333;
+  max-height: 50vh;
+  overflow-y: auto;
+  position: relative;
+}*/
+.routing-close-btn {
+  text-align: right;
+  margin-bottom: 5px;
+}
+.routing-close-btn button {
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  line-height: 1;
+}
+
+
+/* Close button inside routing panel */
+.routing-close-btn {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  background-color: #dc3545; /* Bootstrap danger red */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
+  line-height: 28px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 1001;
+  transition: background-color 0.3s ease;
+}
+
+.routing-close-btn:hover {
+  background-color: #bb2d3b;
+}
+/* Spacer to prevent map from being behind navbar */
+.navbar-spacer {
+  height: 60px; /* Match your navbar height */
+}
+
+/* Make the map fill the rest of the screen below navbar */
+.map-container {
+  height: calc(100vh - 60px); /* Subtract navbar height */
+  width: 100%;
+  z-index: 1;
+  position: relative;
+}
+.map-controls {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 1001;
+  flex-wrap: wrap; /* Make buttons wrap on small screens */
+  justify-content: center;
+}
+
+
+
+.map-controls button {
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+
+
+/* Ensure the leaflet map takes full space */
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+}
+
+.leaflet-routing-container {
+  position: absolute !important;
+  bottom: 80px; /* Push it up above bottom buttons */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95vw;
+  max-height: 25vh;
+  background-color: white;
+  overflow-y: auto;
+  font-size: 13px;
+  border-radius: 12px;
+  z-index: 1000;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* Make sure the close button is visible and styled */
+.routing-close-btn {
+  text-align: right;
+  margin-bottom: 5px;
+}
+
+.routing-close-btn button {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+
+@media (max-width: 768px) {
+  .leaflet-routing-container {
+    width: 95%;
+    max-height: 20vh;
+    font-size: 13px;
+  }
+}
+@media (max-width: 768px) {
+  .map-controls {
+    bottom: 120px; /* move it above your location tools panel */
+  }
+}
+
+.map-toolbar {
+  position: relative;
+  z-index: 1002; /* above the map */
+  border-radius: 1rem;
+}
+
+/* Optional: Slight size tweak for mobile */
+@media (max-width: 768px) {
+  .map-toolbar .btn,
+  .map-toolbar select {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+
+  .map-toolbar label {
+    font-size: 12px;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .map-toolbar .btn,
+  .map-toolbar select {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+
+
+  .map-toolbar label {
+    font-size: 12px;
+  }
+}

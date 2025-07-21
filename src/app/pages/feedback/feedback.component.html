@@ -1,0 +1,34 @@
+<div class="container py-4">
+    <h2 class="text-center text-success mb-3">📣 Send Us Your Feedback</h2>
+  
+    <form (ngSubmit)="submitFeedback()" class="bg-white p-4 rounded shadow">
+      <div class="mb-3">
+        <label for="name" class="form-label">Your Name</label>
+        <input
+          type="text"
+          id="name"
+          class="form-control"
+          [(ngModel)]="feedback.name"
+          name="name"
+          required
+        />
+      </div>
+  
+      <div class="mb-3">
+        <label for="message" class="form-label">Your Message</label>
+        <textarea
+          id="message"
+          class="form-control"
+          [(ngModel)]="feedback.message"
+          name="message"
+          rows="4"
+          required
+        ></textarea>
+      </div>
+  
+      <button type="submit" class="btn btn-success w-100">
+        🚀 Submit Feedback
+      </button>
+    </form>
+  </div>
+  

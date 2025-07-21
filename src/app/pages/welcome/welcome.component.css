@@ -1,0 +1,106 @@
+/* 🔹 Full-page background with parallax effect */
+.welcome-container {
+  height: 100vh;
+  width: 100%;
+  background: url('/assets/kasubg.jpeg') no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed;   /* or just remove this line */
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  
+}
+
+
+/* 🔹 Dark overlay for readability */
+.welcome-overlay {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index: 1;
+  border-radius: 10px;
+ /* width: 100%;
+  max-width: 500px;
+  background-color: rgba(0, 0, 0, 0.65); /* semi-dark glass effect */
+
+  padding: 1rem 1rem;
+}
+
+/* 🔹 Centered welcome content box */
+.welcome-content {
+  position: relative;
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  max-width: 480px;
+  width: 100%;
+  animation-duration: 1s;
+}
+
+/* 🔹 Button hover & focus styling */
+.btn-outline-light:hover,
+.btn-outline-light:focus {
+  background-color: #198754 !important; /* Bootstrap green */
+  color: #fff !important;
+  border-color: #198754 !important;
+  box-shadow: 0 0 10px rgba(25, 135, 84, 0.7);
+  transition: all 0.3s ease;
+}
+
+/* 🔹 Responsive logo */
+.welcome-content img {
+  max-width: 100px;
+  height: auto;
+  border: 3px solid #fff;
+}
+
+/* 🔹 Make sure everything scales well on small screens */
+@media (max-width: 576px) {
+  .welcome-content {
+    padding: 2rem 1rem;
+  }
+
+  .btn-lg {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+  }
+}
+
+.welcome-footer {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #ddd;
+  font-size: 0.85rem;
+  z-index: 3;
+}
+
+.feedback-btn {
+  position: fixed;
+  bottom: 50px;
+  right: 20px;
+  background-color: #198754;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 10px 20px;
+  font-size: 16px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+}
+
+.feedback-btn:hover {
+  background-color: #145c37;
+}
