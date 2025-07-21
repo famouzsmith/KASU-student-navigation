@@ -16,7 +16,7 @@ bootstrapApplication(AppComponent, {
   providers: [
     provideHttpClient(),
     provideRouter(routes),
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()), // ✅ Required for Firestore
     importProvidersFrom(FormsModule) // ✅ Required for ngModel to work
