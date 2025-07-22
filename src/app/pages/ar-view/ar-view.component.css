@@ -1,40 +1,110 @@
 body {
-    background: #f8f9fa;
+  background: #f8f9fa;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.ar-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Start Camera Button */
+/*.start-btn {
+  position: absolute;
+  z-index: 10; /* Make sure it's above video/canvas */
+  /*top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}*/
+
+.start-btn:hover {
+  background-color: #218838;
+}
+
+video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  background: black; /* fallback */
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.start-btn,
+.back-btn {
+  position: absolute;
+  z-index: 2;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  background-color: #28a745;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s;
+  max-width: 80%; /* Prevent button from being too wide */
+  white-space: nowrap;
+}
+
+/* Hover effect */
+.start-btn:hover,
+.back-btn:hover {
+  background-color: #218838;
+}
+
+/* Back to Navigation – top-right with spacing */
+.back-btn {
+  top: 10px;
+  right: 16px; /* Slightly move left from the edge */
+}
+
+/* Start Camera – center below Back button */
+.start-btn {
+  top: 60px;         /* Lower than back button */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Responsive: mobile */
+@media (max-width: 480px) {
+  .start-btn,
+  .back-btn {
+    font-size: 12px;
+    padding: 6px 12px;
   }
 
-  .ar-placeholder {
-    background: linear-gradient(145deg, #e3fceb, #ffffff);
-    border: 1px solid #cfe8dc;
+  .start-btn {
+    top: 65px; /* Space below back button */
   }
 
-  .ar-container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+  .back-btn {
+    right: 12px;
   }
-  
-  video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
-    background: black; /* fallback */
-  }
-  
-  canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    pointer-events: none;
-  }
-  
-  
-  
-  
+}
+

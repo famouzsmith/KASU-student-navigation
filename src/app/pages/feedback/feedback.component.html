@@ -1,34 +1,46 @@
 <div class="container py-4">
-    <h2 class="text-center text-success mb-3">📣 Send Us Your Feedback</h2>
-  
-    <form (ngSubmit)="submitFeedback()" class="bg-white p-4 rounded shadow">
-      <div class="mb-3">
-        <label for="name" class="form-label">Your Name</label>
-        <input
-          type="text"
-          id="name"
-          class="form-control"
-          [(ngModel)]="feedback.name"
-          name="name"
-          required
-        />
-      </div>
-  
-      <div class="mb-3">
-        <label for="message" class="form-label">Your Message</label>
-        <textarea
-          id="message"
-          class="form-control"
-          [(ngModel)]="feedback.message"
-          name="message"
-          rows="4"
-          required
-        ></textarea>
-      </div>
-  
-      <button type="submit" class="btn btn-success w-100">
-        🚀 Submit Feedback
-      </button>
-    </form>
+  <h2 class="text-center text-success mb-3">📣 Send Us Your Feedback</h2>
+
+  <!-- ✅ Show form only if not submitted -->
+  <form
+    *ngIf="!submitted"
+    (ngSubmit)="submitFeedback()"
+    class="bg-white p-4 rounded shadow"
+  >
+    <div class="mb-3">
+      <label for="name" class="form-label">Your Name</label>
+      <input
+        type="text"
+        id="name"
+        class="form-control"
+        [(ngModel)]="feedback.name"
+        name="name"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="message" class="form-label">Your Message</label>
+      <textarea
+        id="message"
+        class="form-control"
+        [(ngModel)]="feedback.message"
+        name="message"
+        rows="4"
+        required
+      ></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success w-100">
+      🚀 Submit Feedback
+    </button>
+  </form>
+
+  <!-- ✅ Show success message and back button -->
+  <div *ngIf="submitted" class="text-center mt-4">
+    <p class="text-success fs-5">✅ Thank you for your feedback!</p>
+    <button (click)="goBack()" class="btn btn-outline-success mt-2">
+      ⬅ Back to Welcome Page
+    </button>
   </div>
-  
+</div>

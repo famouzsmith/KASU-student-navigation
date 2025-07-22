@@ -1,15 +1,21 @@
+import { Router } from '@angular/router';
 import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import * as THREE from 'three';
+
 
 @Component({
   selector: 'app-ar-view',
   standalone: true,
+  
   templateUrl: './ar-view.component.html',
   styleUrls: ['./ar-view.component.css'],
 })
 export class ArViewComponent implements AfterViewInit {
   @ViewChild('canvas') canvasRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('video') videoRef!: ElementRef<HTMLVideoElement>;
+
+  constructor(private router: Router) {}
+
 
   ngAfterViewInit(): void {
     //this.startCamera().then(() => this.setupScene());
@@ -19,22 +25,23 @@ export class ArViewComponent implements AfterViewInit {
     const video = this.videoRef.nativeElement;
     console.log("📸 Trying to access camera...");
   
-    // ✅ Check if mediaDevices and getUserMedia are available
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      console.error("❌ Camera API not supported or page not served over HTTPS");
+    if (!navigator.mediaDevices?.getUserMedia) {
+      console.error("❌ Camera API not supported");
       alert("Camera not supported or must be served over HTTPS.");
       return;
     }
   
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { ideal: 'environment' } }, // Try to use rear camera
+        video: { facingMode: { ideal: 'environment' } },
         audio: false,
       });
   
       video.srcObject = stream;
       await video.play();
-      console.log("✅ Camera stream started");
+      console.log("✅ Camera started");
+  
+      this.setupScene(); // Only run Three.js after camera starts
     } catch (error) {
       console.error("❌ Failed to start camera:", error);
       alert("Camera access failed: " + (error as any).message);
@@ -42,6 +49,9 @@ export class ArViewComponent implements AfterViewInit {
   }
   
   
+  goBack(): void {
+    this.router.navigate(['/navigation']);
+  }
 
   // ✅ Setup THREE.js scene
   setupScene(): void {

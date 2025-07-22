@@ -1,7 +1,12 @@
-<!-- video background -->
-<button (click)="startCamera()">Start Camera</button>
 <div class="ar-container">
+  <button class="start-btn" (click)="startCamera()">
+    <i class="bi bi-camera-video"></i> Start Camera
+  </button>
+
+  <button class="back-btn" (click)="goBack()">
+    <i class="bi bi-arrow-left-circle"></i> Back to Navigation
+  </button>
+
   <video #video autoplay muted playsinline></video>
   <canvas #canvas></canvas>
 </div>
-

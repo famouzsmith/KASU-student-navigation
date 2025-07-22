@@ -15,7 +15,7 @@ export const routes: Routes = [
         (m) => m.NavigationComponent
       ),
   },
-  { path: 'ar-view', component: ArViewComponent }, // ✅ AR View route
+  { path: 'ar-view', component: ArViewComponent }, //  AR View route
   {
     path: 'feedback',
     loadComponent: () => import('./pages/feedback/feedback.component').then(m => m.FeedbackComponent)
