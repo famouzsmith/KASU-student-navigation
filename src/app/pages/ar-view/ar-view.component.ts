@@ -12,15 +12,17 @@ export class ArViewComponent implements AfterViewInit {
   @ViewChild('canvas') canvasRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('video') videoRef!: ElementRef<HTMLVideoElement>;
 
-  destination: { lat: number; lng: number } | null = null;
+  destination: { lat: number; lng: number; name?: string } | null = null;
   arrow!: THREE.ArrowHelper;
 
+  currentPosition: { lat: number; lng: number } | null = null;
+  currentDistance: number = 0;
+
   constructor(private router: Router) {
-    // 🟢 Read destination from navigation.state
     const nav = this.router.getCurrentNavigation();
-    if (nav?.extras?.state && nav.extras.state['destination']) {
+    if (nav?.extras?.state?.['destination']) {
       this.destination = nav.extras.state['destination'];
-      console.log("📌 Destination received:", this.destination);
+      console.log('📌 Destination received:', this.destination);
     }
   }
 
@@ -40,10 +42,10 @@ export class ArViewComponent implements AfterViewInit {
       });
       video.srcObject = stream;
       await video.play();
-      console.log("✅ Camera started");
+      console.log('✅ Camera started');
     } catch (error) {
-      console.error("❌ Failed to start camera:", error);
-      alert("Camera access failed: " + (error as any).message);
+      console.error('❌ Failed to start camera:', error);
+      alert('Camera access failed: ' + (error as any).message);
     }
   }
 
@@ -66,7 +68,6 @@ export class ArViewComponent implements AfterViewInit {
     const grid = new THREE.GridHelper(20, 20, 0x00ff00, 0x888888);
     scene.add(grid);
 
-    // 🟢 Store arrow as a class property
     this.arrow = new THREE.ArrowHelper(
       new THREE.Vector3(0, 0, -1),
       new THREE.Vector3(0, 0, 0),
@@ -89,7 +90,6 @@ export class ArViewComponent implements AfterViewInit {
     animate();
   }
 
-  // 🔄 GPS + Arrow Direction
   startGPS(): void {
     if (!navigator.geolocation) {
       alert('Geolocation not supported by your browser.');
@@ -100,16 +100,20 @@ export class ArViewComponent implements AfterViewInit {
       (position) => {
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
+        this.currentPosition = { lat, lng };
         console.log('📍 Current Position:', lat, lng);
 
         if (this.destination) {
           const bearing = this.calculateBearing(lat, lng, this.destination.lat, this.destination.lng);
           console.log('🧭 Bearing to destination:', bearing.toFixed(2), 'degrees');
 
-          // 🟢 Update arrow direction
           const rad = THREE.MathUtils.degToRad(bearing);
           const dir = new THREE.Vector3(Math.sin(rad), 0, -Math.cos(rad));
           this.arrow.setDirection(dir.normalize());
+
+          // 🧮 Update distance
+          this.currentDistance = this.calculateDistance(lat, lng, this.destination.lat, this.destination.lng);
+          console.log('📏 Distance to destination:', this.currentDistance.toFixed(2), 'meters');
         }
       },
       (error) => {
@@ -124,17 +128,32 @@ export class ArViewComponent implements AfterViewInit {
     );
   }
 
-  // 📐 Bearing between two coordinates
   calculateBearing(lat1: number, lon1: number, lat2: number, lon2: number): number {
     const φ1 = THREE.MathUtils.degToRad(lat1);
     const φ2 = THREE.MathUtils.degToRad(lat2);
     const Δλ = THREE.MathUtils.degToRad(lon2 - lon1);
 
     const y = Math.sin(Δλ) * Math.cos(φ2);
-    const x = Math.cos(φ1) * Math.sin(φ2) -
-              Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
+    const x =
+      Math.cos(φ1) * Math.sin(φ2) -
+      Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
 
     const θ = Math.atan2(y, x);
-    return (THREE.MathUtils.radToDeg(θ) + 360) % 360; // Normalize
+    return (THREE.MathUtils.radToDeg(θ) + 360) % 360;
+  }
+
+  calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const R = 6371000; // Earth radius in meters
+    const φ1 = THREE.MathUtils.degToRad(lat1);
+    const φ2 = THREE.MathUtils.degToRad(lat2);
+    const Δφ = THREE.MathUtils.degToRad(lat2 - lat1);
+    const Δλ = THREE.MathUtils.degToRad(lon2 - lon1);
+
+    const a =
+      Math.sin(Δφ / 2) ** 2 +
+      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) ** 2;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return R * c;
   }
 }
