@@ -26,8 +26,8 @@ export class NavigationComponent implements AfterViewInit {
   map!: L.Map; // Declare map
   mapInitialized = false; // Track if map is already created
 
-  userLat = 10.5092; // KASU default latitude
-  userLng = 7.4276; // KASU default longitude
+  userLat = 10.51679; // KASU default latitude
+  userLng = 7.45052; // KASU default longitude
 
   userLocationMarker: L.Marker | null = null; // ✅ Add this
   currentRouteLine: L.Polyline | null = null; // ✅ Add this
@@ -45,14 +45,14 @@ export class NavigationComponent implements AfterViewInit {
   campusLocations = [
     {
       name: 'Faculty of Science',
-    lat: 10.531192,
-      lng: 7.441019,
+    lat: 10.51620,
+      lng: 7.45075,
       description: 'CBN Building',
     },
     {
       name: 'ICT Center',
-      lat: 10.530385,
-      lng: 7.440237,
+      lat: 10.51714,
+      lng: 7.44963,
       description: 'ICT training, CBT exams.',
     },
   ];
@@ -87,10 +87,17 @@ export class NavigationComponent implements AfterViewInit {
     this.mapInitialized = true;
   }
   constructor(private router: Router) {} // ⬅️ Inject the Router here
-  switchToAR(): void {
-    this.router.navigate(['/ar-view']);
-    alert('🚧 AR View is under development and will be available soon.');
+
+  goToARView(): void {
+    if (this.selectedBuilding) {
+      this.router.navigate(['/ar-view'], {
+        state: { destination: this.selectedBuilding }
+      });
+    } else {
+      alert('Please select a destination first.');
+    }
   }
+  
   
 
   clearRoute(): void {

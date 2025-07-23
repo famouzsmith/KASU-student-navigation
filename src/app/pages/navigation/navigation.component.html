@@ -35,13 +35,20 @@
         <i class="bi bi-geo-alt-fill"></i> Locate Me
       </button>
 
-      <!-- 🕶️ AR View -->
-      <button
-        class="btn btn-primary d-flex align-items-center gap-1"
-        (click)="switchToAR()"
-      >
-        <i class="bi bi-camera-video-fill"></i> AR View
-      </button>
+ <!-- ✅ Show only after user selects a building -->
+<div *ngIf="selectedBuilding" class="d-flex flex-column align-items-start">
+  <p class="mb-1 text-success">
+    Destination: <strong>{{ selectedBuilding.name }}</strong>
+  </p>
+  <button
+    class="btn btn-primary d-flex align-items-center gap-1"
+    (click)="goToARView()"
+  >
+    <i class="bi bi-camera-video-fill"></i> AR View
+  </button>
+</div>
+
+      
 
       <!-- 📌 Jump to Location -->
       <div class="d-flex flex-column">
