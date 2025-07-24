@@ -55,6 +55,60 @@ export class NavigationComponent implements AfterViewInit {
       lng: 7.44963,
       description: 'ICT training, CBT exams.',
     },
+    {
+      name: 'SLT 1',
+      lat: 10.51591,
+      lng: 7.44949,
+      description: 'Science Lecture Theatre 1',
+    },
+    {
+      name: 'Faculty of Computing',
+      lat: 10.51591,
+      lng: 7.44990,
+      description: 'Department of Informatics',
+    },
+    {
+      name: 'Convo',
+      lat: 10.51589,
+      lng: 7.44891,
+      description: 'Convocation Ground KASU',
+    },
+    {
+      name: 'Library',
+      lat: 10.51810,
+      lng: 7.44941,
+      description: 'Central Library',
+    },
+    {
+      name: 'E-Library',
+      lat: 10.51800,
+      lng: 7.44983,
+      description: 'Digital Library',
+    },
+    {
+      name: '1000 Capacity',
+      lat: 10.51666,
+      lng: 7.44944,
+      description: '1k Seaters',
+    },
+    {
+      name: 'Mathematical Science',
+      lat: 10.51540,
+      lng: 7.45050,
+      description: 'Dept of Mathematics',
+    },
+    {
+      name: 'Faculty Social and Manage.',
+      lat: 10.51489,
+      lng: 7.45192,
+      description: 'Social and Management Science',
+    },
+    {
+      name: 'Market',
+      lat: 10.51448,
+      lng: 7.45219,
+      description: 'Kasu Market',
+    },
   ];
 
   ngAfterViewInit(): void {
