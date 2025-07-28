@@ -1,10 +1,12 @@
 import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import * as THREE from 'three';
 
 @Component({
   selector: 'app-ar-view',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './ar-view.component.html',
   styleUrls: ['./ar-view.component.css'],
 })
@@ -13,15 +15,23 @@ export class ArViewComponent implements AfterViewInit {
   @ViewChild('video') videoRef!: ElementRef<HTMLVideoElement>;
 
   destination: { lat: number; lng: number } | null = null;
+  destinationName: string = 'Your Destination';
+  distanceToTarget: number = 0;
+
   arrow!: THREE.ArrowHelper;
   labelMesh!: THREE.Sprite;
   lastBearing: number | null = null;
+  heading: number = 0;
+
+  private scene!: THREE.Scene;
+  private camera!: THREE.PerspectiveCamera;
+  private renderer!: THREE.WebGLRenderer;
 
   constructor(private router: Router) {
     const nav = this.router.getCurrentNavigation();
-    if (nav?.extras?.state && nav.extras.state['destination']) {
+    if (nav?.extras?.state?.['destination']) {
       this.destination = nav.extras.state['destination'];
-      console.log('📌 Destination received:', this.destination);
+      this.destinationName = nav.extras.state['name'] || 'Your Destination';
     }
   }
 
@@ -29,6 +39,13 @@ export class ArViewComponent implements AfterViewInit {
     this.startCamera().then(() => {
       this.setupScene();
       this.startGPS();
+    });
+
+    // 🔄 Listen to device heading
+    window.addEventListener('deviceorientationabsolute', (event: any) => {
+      if (event.absolute && event.alpha !== null) {
+        this.heading = 360 - event.alpha;
+      }
     });
   }
 
@@ -54,55 +71,42 @@ export class ArViewComponent implements AfterViewInit {
 
   setupScene(): void {
     const canvas = this.canvasRef.nativeElement;
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    this.renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setPixelRatio(window.devicePixelRatio);
 
-    const scene = new THREE.Scene();
+    this.scene = new THREE.Scene();
 
-    const camera = new THREE.PerspectiveCamera(
+    this.camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
       0.1,
       1000
     );
-    camera.position.set(0, 5, 10);
-    camera.lookAt(0, 0, 0);
+    this.camera.position.set(0, 5, 10);
+    this.camera.lookAt(0, 0, 0);
 
-    // 🔴 Arrow
+    // 🔺 Arrow
     const arrowDirection = new THREE.Vector3(0, 0, -1);
     const arrowOrigin = new THREE.Vector3(0, 0, 0);
-    this.arrow = new THREE.ArrowHelper(arrowDirection, arrowOrigin, 5, 0xff0000);
-    scene.add(this.arrow);
+    this.arrow = new THREE.ArrowHelper(arrowDirection, arrowOrigin, 5, 0x00ff00);
+    this.scene.add(this.arrow);
 
-    // 🟩 Label sprite
-    const canvas2 = document.createElement('canvas');
-    canvas2.width = 256;
-    canvas2.height = 64;
-    const ctx = canvas2.getContext('2d')!;
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '24px Arial';
-    ctx.fillText('To Destination ⬆️', 20, 40);
-
-    const texture = new THREE.CanvasTexture(canvas2);
-    const material = new THREE.SpriteMaterial({ map: texture });
-    this.labelMesh = new THREE.Sprite(material);
-    this.labelMesh.scale.set(4, 1, 1);
-    this.labelMesh.position.set(0, 6, 0);
-    scene.add(this.labelMesh);
+    // 🏷️ Label
+    this.updateLabel("To Destination ⬆️");
 
     // 💡 Lighting
     const light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(10, 10, 10);
-    scene.add(light);
-    scene.add(new THREE.AmbientLight(0x404040));
+    this.scene.add(light);
+    this.scene.add(new THREE.AmbientLight(0x404040));
 
-    // 🎞️ Render loop
-    const animate = () => {
-      requestAnimationFrame(animate);
-      renderer.render(scene, camera);
-    };
-    animate();
+    this.animate();
+  }
+
+  animate(): void {
+    requestAnimationFrame(() => this.animate());
+    this.renderer.render(this.scene, this.camera);
   }
 
   startGPS(): void {
@@ -115,30 +119,61 @@ export class ArViewComponent implements AfterViewInit {
       (position) => {
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
-        console.log('📍 Your position:', lat, lng);
+        console.log('📍 Current position:', lat, lng);
 
         if (this.destination) {
-          const bearing = this.calculateBearing(lat, lng, this.destination.lat, this.destination.lng);
-          if (this.lastBearing === null || Math.abs(bearing - this.lastBearing) > 5) {
-            console.log('🧭 New bearing:', bearing.toFixed(2), '°');
-            this.lastBearing = bearing;
+          // 📏 1. Distance
+          const distance = this.calculateDistance(lat, lng, this.destination.lat, this.destination.lng);
+          this.distanceToTarget = distance;
 
-            const rad = THREE.MathUtils.degToRad(bearing);
-            const dir = new THREE.Vector3(Math.sin(rad), 0, -Math.cos(rad)).normalize();
-            this.arrow.setDirection(dir);
-          }
+          // 🧭 2. Bearing
+          const bearing = this.calculateBearing(lat, lng, this.destination.lat, this.destination.lng);
+
+          // 📐 3. Calculate relative angle
+          const angle = (bearing - this.heading + 360) % 360;
+
+          // 🧭 4. Rotate arrow direction
+          const radians = THREE.MathUtils.degToRad(angle);
+          const dir = new THREE.Vector3(Math.sin(radians), 0, -Math.cos(radians)).normalize();
+          this.arrow.setDirection(dir);
+
+          // 🏷️ 5. Update label text
+          this.updateLabel(`${this.destinationName}\n${distance.toFixed(1)} meters`);
         }
       },
       (err) => {
-        console.error('❌ GPS Error:', err);
-        alert('Failed to get your location. Please enable GPS.');
+        console.error('❌ GPS error:', err);
+        alert('Failed to get your location. Enable GPS and try again.');
       },
       {
         enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0,
+        timeout: 30000,
+        maximumAge: 1000,
       }
     );
+  }
+
+  updateLabel(text: string): void {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 128;
+    const ctx = canvas.getContext('2d')!;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '28px Arial';
+    ctx.fillText(text, 20, 70);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    const material = new THREE.SpriteMaterial({ map: texture });
+    if (this.labelMesh) {
+      this.labelMesh.material.map = texture;
+      this.labelMesh.material.needsUpdate = true;
+    } else {
+      this.labelMesh = new THREE.Sprite(material);
+      this.labelMesh.scale.set(6, 1.5, 1);
+      this.labelMesh.position.set(0, 6, 0);
+      this.scene.add(this.labelMesh);
+    }
   }
 
   calculateBearing(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -150,5 +185,19 @@ export class ArViewComponent implements AfterViewInit {
     const x = Math.cos(φ1) * Math.sin(φ2) - Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
     const θ = Math.atan2(y, x);
     return (THREE.MathUtils.radToDeg(θ) + 360) % 360;
+  }
+
+  calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const R = 6371000;
+    const φ1 = THREE.MathUtils.degToRad(lat1);
+    const φ2 = THREE.MathUtils.degToRad(lat2);
+    const Δφ = φ2 - φ1;
+    const Δλ = THREE.MathUtils.degToRad(lon2 - lon1);
+
+    const a =
+      Math.sin(Δφ / 2) ** 2 +
+      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) ** 2;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
   }
 }

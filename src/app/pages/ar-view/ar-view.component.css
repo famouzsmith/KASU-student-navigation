@@ -116,3 +116,30 @@ canvas {
   }
 }
 
+.info-overlay {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 3;
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.destination-label {
+  font-size: 20px;
+  font-weight: 600;
+  background-color: rgba(0, 123, 255, 0.8);
+  padding: 6px 16px;
+  border-radius: 16px;
+  margin-bottom: 5px;
+}
+
+.distance-indicator {
+  font-size: 16px;
+  font-weight: 400;
+  background-color: rgba(40, 167, 69, 0.85);
+  padding: 4px 12px;
+  border-radius: 12px;
+}

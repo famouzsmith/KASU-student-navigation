@@ -104,11 +104,30 @@ export class NavigationComponent implements AfterViewInit {
       description: 'Social and Management Science',
     },
     {
-      name: 'Market',
-      lat: 10.51448,
-      lng: 7.45219,
-      description: 'Kasu Market',
+      name: 'Dental Center',
+      lat: 10.51713,
+      lng: 7.45133,
+      description: 'Kasu Dental',
     },
+    {
+      name: 'Registry',
+      lat: 10.51800,
+      lng: 7.44900,
+      description: 'Office of the Registrar',
+    },
+    {
+      name: 'VC Complex',
+      lat: 10.51807,
+      lng: 7.44880,
+      description: 'Office of the Vice Chancelor',
+    },
+    {
+      name: 'Kasu Consult',
+      lat: 10.51705,
+      lng: 7.44903,
+      description: 'Consultancy Service',
+    },
+
   ];
 
   ngAfterViewInit(): void {
