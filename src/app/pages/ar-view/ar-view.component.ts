@@ -2,6 +2,7 @@ import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import * as THREE from 'three';
+import { Line, LineDashedMaterial, BufferGeometry } from 'three';
 
 @Component({
   selector: 'app-ar-view',
@@ -19,6 +20,7 @@ export class ArViewComponent implements AfterViewInit {
   distanceToTarget: number = 0;
 
   arrow!: THREE.ArrowHelper;
+  dottedLine!: THREE.Line;
   labelMesh!: THREE.Sprite;
   lastBearing: number | null = null;
   heading: number = 0;
@@ -41,7 +43,6 @@ export class ArViewComponent implements AfterViewInit {
       this.startGPS();
     });
 
-    // 🔄 Listen to device heading
     window.addEventListener('deviceorientationabsolute', (event: any) => {
       if (event.absolute && event.alpha !== null) {
         this.heading = 360 - event.alpha;
@@ -86,22 +87,35 @@ export class ArViewComponent implements AfterViewInit {
     this.camera.position.set(0, 5, 10);
     this.camera.lookAt(0, 0, 0);
 
-    // 🔺 Arrow
     const arrowDirection = new THREE.Vector3(0, 0, -1);
     const arrowOrigin = new THREE.Vector3(0, 0, 0);
     this.arrow = new THREE.ArrowHelper(arrowDirection, arrowOrigin, 5, 0x00ff00);
     this.scene.add(this.arrow);
 
-    // 🏷️ Label
+    this.createDottedLine();
+
     this.updateLabel("To Destination ⬆️");
 
-    // 💡 Lighting
     const light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(10, 10, 10);
     this.scene.add(light);
     this.scene.add(new THREE.AmbientLight(0x404040));
 
     this.animate();
+  }
+
+  createDottedLine(): void {
+    const points = [new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, -5)];
+    const geometry = new BufferGeometry().setFromPoints(points);
+    const material = new LineDashedMaterial({
+      color: 0xffffff,
+      dashSize: 0.3,
+      gapSize: 0.2,
+      linewidth: 1,
+    });
+    this.dottedLine = new Line(geometry, material);
+    this.dottedLine.computeLineDistances();
+    this.scene.add(this.dottedLine);
   }
 
   animate(): void {
@@ -122,22 +136,22 @@ export class ArViewComponent implements AfterViewInit {
         console.log('📍 Current position:', lat, lng);
 
         if (this.destination) {
-          // 📏 1. Distance
           const distance = this.calculateDistance(lat, lng, this.destination.lat, this.destination.lng);
           this.distanceToTarget = distance;
 
-          // 🧭 2. Bearing
           const bearing = this.calculateBearing(lat, lng, this.destination.lat, this.destination.lng);
-
-          // 📐 3. Calculate relative angle
           const angle = (bearing - this.heading + 360) % 360;
 
-          // 🧭 4. Rotate arrow direction
           const radians = THREE.MathUtils.degToRad(angle);
           const dir = new THREE.Vector3(Math.sin(radians), 0, -Math.cos(radians)).normalize();
           this.arrow.setDirection(dir);
 
-          // 🏷️ 5. Update label text
+          const points = [new THREE.Vector3(0, 0, 0), dir.clone().multiplyScalar(5)];
+          const geometry = new THREE.BufferGeometry().setFromPoints(points);
+          this.dottedLine.geometry.dispose();
+          this.dottedLine.geometry = geometry;
+          this.dottedLine.computeLineDistances();
+
           this.updateLabel(`${this.destinationName}\n${distance.toFixed(1)} meters`);
         }
       },

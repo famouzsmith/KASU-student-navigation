@@ -68,6 +68,12 @@ export class NavigationComponent implements AfterViewInit {
       description: 'Department of Informatics',
     },
     {
+      name: 'Multipurpose Lab',
+      lat: 10.51584,
+      lng: 7.45044,
+      description: 'Lab',
+    },
+    {
       name: 'Convo',
       lat: 10.51589,
       lng: 7.44891,
@@ -84,6 +90,12 @@ export class NavigationComponent implements AfterViewInit {
       lat: 10.51800,
       lng: 7.44983,
       description: 'Digital Library',
+    },
+    {
+      name: 'IT Park',
+      lat: 10.51870,
+      lng: 7.44983,
+      description: 'IT Park',
     },
     {
       name: '1000 Capacity',
@@ -105,8 +117,8 @@ export class NavigationComponent implements AfterViewInit {
     },
     {
       name: 'Dental Center',
-      lat: 10.51713,
-      lng: 7.45133,
+      lat: 10.51770,
+      lng: 7.44830,
       description: 'Kasu Dental',
     },
     {
@@ -126,6 +138,12 @@ export class NavigationComponent implements AfterViewInit {
       lat: 10.51705,
       lng: 7.44903,
       description: 'Consultancy Service',
+    },
+    {
+      name: 'Field',
+      lat: 10.51713,
+      lng: 7.45060,
+      description: 'Football Field/Parking Lot',
     },
 
   ];
