@@ -22,8 +22,10 @@ export class ArViewComponent implements AfterViewInit {
   arrow!: THREE.ArrowHelper;
   dottedLine!: THREE.Line;
   labelMesh!: THREE.Sprite;
+  destinationMarker: THREE.Mesh | null = null;
   lastBearing: number | null = null;
   heading: number = 0;
+  showArrivalLabel: boolean = false;
 
   private scene!: THREE.Scene;
   private camera!: THREE.PerspectiveCamera;
@@ -93,7 +95,6 @@ export class ArViewComponent implements AfterViewInit {
     this.scene.add(this.arrow);
 
     this.createDottedLine();
-
     this.updateLabel("To Destination ⬆️");
 
     const light = new THREE.DirectionalLight(0xffffff, 1);
@@ -153,6 +154,16 @@ export class ArViewComponent implements AfterViewInit {
           this.dottedLine.computeLineDistances();
 
           this.updateLabel(`${this.destinationName}\n${distance.toFixed(1)} meters`);
+
+          // ✅ Distance-based marker & label toggle logic
+          if (distance <= 20 && !this.destinationMarker) {
+            this.add3DDestinationMarker();
+            this.showArrivalLabel = true;
+          } else if (distance > 20 && this.destinationMarker) {
+            this.camera.remove(this.destinationMarker);
+            this.destinationMarker = null;
+            this.showArrivalLabel = false;
+          }
         }
       },
       (err) => {
@@ -165,6 +176,15 @@ export class ArViewComponent implements AfterViewInit {
         maximumAge: 1000,
       }
     );
+  }
+
+  add3DDestinationMarker(): void {
+    const geometry = new THREE.ConeGeometry(0.5, 1.5, 8);
+    const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+    this.destinationMarker = new THREE.Mesh(geometry, material);
+    this.destinationMarker.position.set(0, 1, -5); // in front of camera
+    this.camera.add(this.destinationMarker);
+    console.log('🚩 Destination marker added');
   }
 
   updateLabel(text: string): void {

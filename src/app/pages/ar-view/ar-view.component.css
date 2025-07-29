@@ -19,24 +19,6 @@ canvas {
   object-fit: cover;
 }
 
-
-/* Start Camera Button */
-/*.start-btn {
-  position: absolute;
-  z-index: 10; /* Make sure it's above video/canvas */
-  /*top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 12px 20px;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 25px;
-  font-size: 16px;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}*/
-
 .start-btn:hover {
   background-color: #218838;
 }
@@ -142,4 +124,91 @@ canvas {
   background-color: rgba(40, 167, 69, 0.85);
   padding: 4px 12px;
   border-radius: 12px;
+  bottom:50px;
 }
+#mini-map {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.user-marker-icon div {
+  transition: transform 0.2s ease-in-out;
+}
+
+.compass-hud {
+  position: fixed;
+  bottom: 70px;  /* 👈 move to bottom */
+  right: 15px;   /* 👈 keep on the right */
+  width: 80px;
+  height: 80px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.compass-circle {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-origin: center center;
+  transition: transform 0.3s ease;
+}
+
+.compass-circle i {
+  color: white;
+  font-size: 24px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.compass-circle span {
+  position: absolute;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.north { top: 5px; left: 50%; transform: translateX(-50%); }
+.east  { right: 5px; top: 50%; transform: translateY(-50%); }
+.south { bottom: 5px; left: 50%; transform: translateX(-50%); }
+.west  { left: 5px; top: 50%; transform: translateY(-50%); }
+
+.compass-hud i {
+  color: white;
+  font-size: 28px;
+  transition: transform 0.3s ease;
+}
+
+
+.destination-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 999;
+  text-align: center;
+  max-width: 90%;
+}
+
+@media (max-width: 400px) {
+  .destination-label {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+}
+

@@ -1,18 +1,40 @@
 <div class="ar-container">
   <button class="start-btn" (click)="startCamera()">
-    <i class="bi bi-camera-video"></i> Start Camera
+    <i class="bi bi-camera-video"></i>
   </button>
 
   <button class="back-btn" (click)="goBack()">
-    <i class="bi bi-arrow-left-circle"></i> Back to Navigation
+    <i class="bi bi-arrow-left-circle"></i> 
   </button>
 
   <video #video autoplay muted playsinline></video>
   <canvas #canvas></canvas>
 
+  <div class="destination-label" *ngIf="showArrivalLabel">
+    <i class="bi bi-geo-alt-fill"></i> You’ve Arrived!
+  </div>
+
+ <!-- Compass HUD with Direction Labels -->
+<div class="compass-hud">
+  <div class="compass-circle" [style.transform]="'rotate(' + heading + 'deg)'">
+    <span class="north">N</span>
+    <span class="east">E</span>
+    <span class="south">S</span>
+    <span class="west">W</span>
+    <i class="bi bi-compass"></i>
+  </div>
+</div>
+
+
+
+  <!-- 🗺️ Mini Map Overlay -->
+  <!--<div id="mini-map" style="position: absolute; bottom: 20px; right: 20px; width: 100px; height: 100px; border: 2px solid white; z-index: 10;"></div>-->
+
   <!-- Label + Distance -->
   <div class="info-overlay">
     <div class="destination-label">{{ destinationName }}</div>
-    <div class="distance-indicator">{{ distanceToTarget | number: '1.0-1' }} m away</div>
+    <div class="distance-indicator">
+      {{ distanceToTarget | number : "1.0-1" }} m away
+    </div>
   </div>
 </div>
