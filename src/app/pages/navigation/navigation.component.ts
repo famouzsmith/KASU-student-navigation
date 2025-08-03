@@ -36,6 +36,7 @@ export class NavigationComponent implements AfterViewInit {
   userLocation: L.LatLng | null = null;
   routingControl: any; // fallback type to avoid TypeScript error
   isLoading = false;
+  userLocationCircle: L.Circle | null = null;
 
 
 
@@ -286,31 +287,44 @@ export class NavigationComponent implements AfterViewInit {
   }
   
 
+  userIcon = L.icon({
+    iconUrl: 'assets/green-marker.png', // green pin
+    iconSize: [35, 35],
+    iconAnchor: [17, 35],
+    popupAnchor: [0, -35]
+  });
+  
   locateUser(): void {
     if (!this.map) return;
-
-    this.isLoading = true; //Before location start
-
+  
+    this.isLoading = true;
+  
     this.map.locate({ setView: true, maxZoom: 19 });
-
-    this.map.on('locationfound', (e: L.LocationEvent) => {
-      this.isLoading = false; //after location found or fail
-
-      // Clear previous marker
+  
+    this.map.once('locationfound', (e: L.LocationEvent) => {
+      this.isLoading = false;
+  
+      // Remove previous user marker
       if (this.userLocationMarker) {
         this.map.removeLayer(this.userLocationMarker);
       }
-
-      this.userLocation = e.latlng; // Save current location
-      this.userLocationMarker = L.marker(e.latlng)
-      L.marker(e.latlng)
+  
+      // OPTIONAL: remove circle if used before
+      if (this.userLocationCircle) {
+        this.map.removeLayer(this.userLocationCircle);
+      }
+  
+      // Add green user marker
+      this.userLocation = e.latlng;
+      this.userLocationMarker = L.marker(e.latlng, { icon: this.userIcon })
         .addTo(this.map!)
-        .bindPopup('You are here now')
+        .bindPopup('📍 You are here now')
         .openPopup();
-
+  
     });
-
+  
     this.map.once('locationerror', () => {
+      this.isLoading = false;
       alert('❌ Unable to access your location');
     });
   }

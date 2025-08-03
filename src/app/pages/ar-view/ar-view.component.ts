@@ -95,7 +95,7 @@ export class ArViewComponent implements AfterViewInit {
     this.scene.add(this.arrow);
 
     this.createDottedLine();
-    this.updateLabel("To Destination ⬆️");
+    //this.updateLabel("To Destination ⬆️");
 
     const light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(10, 10, 10);
