@@ -54,7 +54,7 @@ canvas {
   font-size: 14px;
   font-weight: 500;
   color: white;
-  background-color: #28a745;
+  background-color: #a7bdac;
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s;
@@ -70,7 +70,7 @@ canvas {
 
 /* Back to Navigation – top-right with spacing */
 .back-btn {
-  top: 10px;
+  top: 15px;
   right: 16px; /* Slightly move left from the edge */
 }
 
@@ -109,14 +109,14 @@ canvas {
   font-family: 'Segoe UI', sans-serif;
 }
 
-.destination-label {
+/*.destination-label {
   font-size: 20px;
   font-weight: 600;
   background-color: rgba(0, 123, 255, 0.8);
   padding: 6px 16px;
   border-radius: 16px;
   margin-bottom: 5px;
-}
+}*/
 
 .distance-indicator {
   font-size: 16px;
@@ -137,7 +137,7 @@ canvas {
 
 .compass-hud {
   position: fixed;
-  bottom: 70px;  /* 👈 move to bottom */
+  bottom: 90px;  /* 👈 move to bottom */
   right: 15px;   /* 👈 keep on the right */
   width: 80px;
   height: 80px;
@@ -186,33 +186,72 @@ canvas {
 }
 
 
-.destination-label {
-  position: absolute;
-  top: 50px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1.2rem;
-  background: rgba(0, 0, 0, 0.7);
-  color: #fff;
-  padding: 8px 16px;
-  border-radius: 8px;
-  z-index: 1000;
-}
-
-.destination-label {
-  position: absolute;
+/* This is for the center "You've Arrived!" message */
+.arrival-label {
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  background: rgba(0, 128, 0, 0.85);
+  color: white;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  max-width: 90vw;
+  word-break: break-word;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.bottom-info-overlay {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  max-width: 90vw;
+}
+
+/* Destination name at the bottom */
+.destination-label {
+  font-size: 1rem;
   background: rgba(0, 0, 0, 0.7);
   color: #fff;
   padding: 8px 16px;
   border-radius: 8px;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  z-index: 999;
   text-align: center;
-  max-width: 90%;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+/* Distance indicator below it */
+.distance-indicator {
+  font-size: 0.95rem;
+  background: rgba(255, 255, 255, 0.85);
+  color: #000;
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-align: center;
+  max-width: 100%;
+}
+
+@media (max-width: 600px) {
+  .destination-label {
+    font-size: 0.95rem;
+    padding: 6px 12px;
+  }
+
+  .distance-indicator {
+    font-size: 0.9rem;
+    padding: 5px 10px;
+  }
 }

@@ -2,8 +2,8 @@ import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router} from '@angular/router';
 
-import * as L from 'leaflet'; // ✅ First, import Leaflet
-import 'leaflet-routing-machine'; // ✅ Then import Leaflet Routing Machine
+import * as L from 'leaflet'; // First, import Leaflet
+import 'leaflet-routing-machine'; // Then import Leaflet Routing Machine
 
 
 // Fix the missing Leaflet marker icons (404 errors)
@@ -29,8 +29,8 @@ export class NavigationComponent implements AfterViewInit {
   userLat = 10.51679; // KASU default latitude
   userLng = 7.45052; // KASU default longitude
 
-  userLocationMarker: L.Marker | null = null; // ✅ Add this
-  currentRouteLine: L.Polyline | null = null; // ✅ Add this
+  userLocationMarker: L.Marker | null = null; 
+  currentRouteLine: L.Polyline | null = null; 
   routeLine: L.Polyline | null = null;
   selectedBuilding: any = null;
   userLocation: L.LatLng | null = null;
@@ -261,7 +261,7 @@ export class NavigationComponent implements AfterViewInit {
       this.routingControl = null!;
     }
   
-    // ✅ Create new routing control
+    // Create new routing control
     this.routingControl = L.Routing.control({
       waypoints: [
         L.latLng(this.userLocation.lat, this.userLocation.lng),

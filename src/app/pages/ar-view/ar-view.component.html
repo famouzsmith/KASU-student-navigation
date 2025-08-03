@@ -10,9 +10,10 @@
   <video #video autoplay muted playsinline></video>
   <canvas #canvas></canvas>
 
-  <div class="destination-label" *ngIf="showArrivalLabel">
-    <i class="bi bi-geo-alt-fill"></i> You’ve Arrived!
-  </div>
+  <!-- Arrival Label -->
+<div class="arrival-label" *ngIf="showArrivalLabel">
+  <i class="bi bi-geo-alt-fill"></i> You’ve Arrived!
+</div>
 
  <!-- Compass HUD with Direction Labels -->
 <div class="compass-hud">

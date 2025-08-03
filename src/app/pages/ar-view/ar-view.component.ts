@@ -156,7 +156,7 @@ export class ArViewComponent implements AfterViewInit {
           this.updateLabel(`${this.destinationName}\n${distance.toFixed(1)} meters`);
 
           // ✅ Distance-based marker & label toggle logic
-          if (distance <= 20) {
+          if (distance <= 30) {
             if (!this.destinationMarker) {
               this.add3DDestinationMarker();
             }

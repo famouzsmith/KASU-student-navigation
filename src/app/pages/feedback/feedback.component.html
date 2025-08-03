@@ -1,7 +1,7 @@
 <div class="container py-4">
   <h2 class="text-center text-success mb-3">📣 Send Us Your Feedback</h2>
 
-  <!-- ✅ Show form only if not submitted -->
+  <!--  Show form only if not submitted -->
   <form
     *ngIf="!submitted"
     (ngSubmit)="submitFeedback()"
@@ -36,7 +36,7 @@
     </button>
   </form>
 
-  <!-- ✅ Show success message and back button -->
+  <!--  Show success message and back button -->
   <div *ngIf="submitted" class="text-center mt-4">
     <p class="text-success fs-5">✅ Thank you for your feedback!</p>
     <button (click)="goBack()" class="btn btn-outline-success mt-2">
