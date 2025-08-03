@@ -137,8 +137,8 @@ canvas {
 
 .compass-hud {
   position: fixed;
-  bottom: 90px;  /* 👈 move to bottom */
-  right: 15px;   /* 👈 keep on the right */
+  bottom: 90px;  /*  move to bottom */
+  right: 15px;   /*  keep on the right */
   width: 80px;
   height: 80px;
   background: rgba(0, 0, 0, 0.5);
