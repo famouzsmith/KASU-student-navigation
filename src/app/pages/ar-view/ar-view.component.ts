@@ -156,14 +156,19 @@ export class ArViewComponent implements AfterViewInit {
           this.updateLabel(`${this.destinationName}\n${distance.toFixed(1)} meters`);
 
           // ✅ Distance-based marker & label toggle logic
-          if (distance <= 20 && !this.destinationMarker) {
-            this.add3DDestinationMarker();
+          if (distance <= 20) {
+            if (!this.destinationMarker) {
+              this.add3DDestinationMarker();
+            }
             this.showArrivalLabel = true;
-          } else if (distance > 20 && this.destinationMarker) {
-            this.camera.remove(this.destinationMarker);
-            this.destinationMarker = null;
+          } else {
+            if (this.destinationMarker) {
+              this.camera.remove(this.destinationMarker);
+              this.destinationMarker = null;
+            }
             this.showArrivalLabel = false;
           }
+          
         }
       },
       (err) => {
@@ -234,4 +239,6 @@ export class ArViewComponent implements AfterViewInit {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
   }
+
+  
 }

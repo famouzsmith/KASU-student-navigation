@@ -45,8 +45,8 @@ export class NavigationComponent implements AfterViewInit {
   campusLocations = [
     {
       name: 'Faculty of Science',
-    lat: 10.51620,
-      lng: 7.45075,
+    lat: 10.51640,
+      lng: 7.45060,
       description: 'CBN Building',
     },
     {
