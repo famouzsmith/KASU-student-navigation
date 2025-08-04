@@ -26,9 +26,6 @@ export class NavigationComponent implements AfterViewInit {
   map!: L.Map; // Declare map
   mapInitialized = false; // Track if map is already created
 
-  userLat = 10.51679; // KASU default latitude
-  userLng = 7.45052; // KASU default longitude
-
   userLocationMarker: L.Marker | null = null; 
   currentRouteLine: L.Polyline | null = null; 
   routeLine: L.Polyline | null = null;
@@ -38,9 +35,10 @@ export class NavigationComponent implements AfterViewInit {
   isLoading = false;
   userLocationCircle: L.Circle | null = null;
 
-
-
   buildingMarkers: { [name: string]: L.Marker } = {};
+
+  userLat = 10.51679; // KASU default latitude
+  userLng = 7.45052; // KASU default longitude
 
   // Example campus markers
   campusLocations = [

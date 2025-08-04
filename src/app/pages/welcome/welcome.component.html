@@ -5,14 +5,29 @@
       <img src="assets/kasulogo.png" width="100" class="mb-3 rounded-circle border border-white" alt="KASU Logo" />
       <h2 class="text-white fw-bold mb-2">KASU Campus Navigator</h2>
       <p class="text-light mb-4">Explore campus with ease and confidence.</p>
-      
-      <!--  Bootstrap Icon Button -->
-      <a routerLink="/navigation" class="btn btn-outline-light btn-lg rounded-pill px-4">
+
+      <!-- 🔽 Dropdown to select campus -->
+      <div class="form-group mb-4">
+        <select [(ngModel)]="selectedCampus" class="form-select form-select-lg rounded-pill" style="max-width: 300px; margin: 0 auto;">
+          <option value="" disabled selected>Select Campus</option>
+          <option value="main">Main Campus</option>
+          <option value="kakuri">Kakuri Campus</option>
+          <option value="kaf">Kaf Campus</option>
+        </select>
+      </div>
+
+      <!-- 🔘 Start Navigation Button -->
+      <button 
+        class="btn btn-outline-light btn-lg rounded-pill px-4" 
+        [routerLink]="['/navigation']" 
+        [queryParams]="{ campus: selectedCampus }"
+        [disabled]="!selectedCampus">
         <i class="bi bi-compass-fill me-2"></i> Start Navigation
-      </a>
+      </button>
     </div>
   </div>
 </div>
+
 
 <!--  Floating Feedback Button -->
 <button class="feedback-btn" (click)="openFeedback()">

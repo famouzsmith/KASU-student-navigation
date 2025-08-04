@@ -104,3 +104,15 @@
 .feedback-btn:hover {
   background-color: #145c37;
 }
+
+.form-select {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  font-weight: bold;
+  text-align: center;
+}
+
+.form-select:focus {
+  box-shadow: 0 0 5px #198754;
+  border-color: #198754;
+}
