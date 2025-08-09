@@ -1,10 +1,9 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, Router} from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 
 import * as L from 'leaflet'; // First, import Leaflet
 import 'leaflet-routing-machine'; // Then import Leaflet Routing Machine
-
 
 // Fix the missing Leaflet marker icons (404 errors)
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -26,8 +25,8 @@ export class NavigationComponent implements AfterViewInit {
   map!: L.Map; // Declare map
   mapInitialized = false; // Track if map is already created
 
-  userLocationMarker: L.Marker | null = null; 
-  currentRouteLine: L.Polyline | null = null; 
+  userLocationMarker: L.Marker | null = null;
+  currentRouteLine: L.Polyline | null = null;
   routeLine: L.Polyline | null = null;
   selectedBuilding: any = null;
   userLocation: L.LatLng | null = null;
@@ -44,8 +43,8 @@ export class NavigationComponent implements AfterViewInit {
   campusLocations = [
     {
       name: 'Faculty of Science',
-    lat: 10.51640,
-      lng: 7.45060,
+      lat: 10.5164,
+      lng: 7.4506,
       description: 'CBN Building',
     },
     {
@@ -63,7 +62,7 @@ export class NavigationComponent implements AfterViewInit {
     {
       name: 'Faculty of Computing',
       lat: 10.51591,
-      lng: 7.44990,
+      lng: 7.4499,
       description: 'Department of Informatics',
     },
     {
@@ -80,19 +79,19 @@ export class NavigationComponent implements AfterViewInit {
     },
     {
       name: 'Library',
-      lat: 10.51810,
+      lat: 10.5181,
       lng: 7.44941,
       description: 'Central Library',
     },
     {
       name: 'E-Library',
-      lat: 10.51800,
+      lat: 10.518,
       lng: 7.44983,
       description: 'Digital Library',
     },
     {
       name: 'IT Park',
-      lat: 10.51870,
+      lat: 10.5187,
       lng: 7.44983,
       description: 'IT Park',
     },
@@ -104,8 +103,8 @@ export class NavigationComponent implements AfterViewInit {
     },
     {
       name: 'Mathematical Science',
-      lat: 10.51540,
-      lng: 7.45050,
+      lat: 10.5154,
+      lng: 7.4505,
       description: 'Dept of Mathematics',
     },
     {
@@ -116,20 +115,20 @@ export class NavigationComponent implements AfterViewInit {
     },
     {
       name: 'Dental Center',
-      lat: 10.51770,
-      lng: 7.44830,
+      lat: 10.5177,
+      lng: 7.4483,
       description: 'Kasu Dental',
     },
     {
       name: 'Registry',
-      lat: 10.51800,
-      lng: 7.44900,
+      lat: 10.518,
+      lng: 7.449,
       description: 'Office of the Registrar',
     },
     {
       name: 'VC Complex',
       lat: 10.51807,
-      lng: 7.44880,
+      lng: 7.4488,
       description: 'Office of the Vice Chancelor',
     },
     {
@@ -141,10 +140,9 @@ export class NavigationComponent implements AfterViewInit {
     {
       name: 'Field',
       lat: 10.51713,
-      lng: 7.45060,
+      lng: 7.4506,
       description: 'Football Field/Parking Lot',
     },
-
   ];
 
   ngAfterViewInit(): void {
@@ -181,14 +179,12 @@ export class NavigationComponent implements AfterViewInit {
   goToARView(): void {
     if (this.selectedBuilding) {
       this.router.navigate(['/ar-view'], {
-        state: { destination: this.selectedBuilding }
+        state: { destination: this.selectedBuilding },
       });
     } else {
       alert('Please select a destination first.');
     }
   }
-  
-  
 
   clearRoute(): void {
     // Remove the routing line/control if it exists
@@ -196,33 +192,33 @@ export class NavigationComponent implements AfterViewInit {
       this.map.removeControl(this.routingControl);
       this.routingControl = null;
     }
-  
     // Remove the selected building info
     this.selectedBuilding = null;
-  
+
     // Reset the dropdown to "Select a building"
-    const selector: HTMLSelectElement | null = document.getElementById('locationSelect') as HTMLSelectElement;
+    const selector: HTMLSelectElement | null = document.getElementById(
+      'locationSelect'
+    ) as HTMLSelectElement;
     if (selector) {
       selector.selectedIndex = 0;
     }
-  
+
     // Optionally reset map view to user location
     if (this.userLocation) {
       this.map.setView(this.userLocation, 18, { animate: true });
     }
   }
-  
 
   resetMap(): void {
     // Clear selected building info
     this.selectedBuilding = null;
-  
+
     // Remove the route line if exists
     if (this.routingControl) {
       this.map.removeControl(this.routingControl);
       this.routingControl = null!;
     }
-  
+
     // Center back to user location if available
     if (this.userLocation) {
       this.map.setView(this.userLocation, 18, { animate: true });
@@ -231,96 +227,93 @@ export class NavigationComponent implements AfterViewInit {
       this.map.setView([this.userLat, this.userLng], 18);
     }
   }
-  
-  
 
   goToLocation(buildingName: string): void {
     if (!this.userLocation) {
       alert('⚠️ Please click "Locate Me" first to get your current location.');
       return;
     }
-  
+
     const marker = this.buildingMarkers[buildingName];
-    const selected = this.campusLocations.find(loc => loc.name === buildingName);
-  
+    const selected = this.campusLocations.find(
+      (loc) => loc.name === buildingName
+    );
+
     if (!marker || !this.map || !selected) {
       console.warn('No marker found for:', buildingName);
       return;
     }
-  
+
     this.selectedBuilding = selected;
-  
+
     // Fly to marker and open popup
     this.map.setView(marker.getLatLng(), 19, { animate: true });
     marker.openPopup();
-  
+
     // Clear previous route if exists
     if (this.routingControl) {
       this.map.removeControl(this.routingControl);
       this.routingControl = null!;
     }
-  
+
     // Create new routing control
     this.routingControl = L.Routing.control({
       waypoints: [
         L.latLng(this.userLocation.lat, this.userLocation.lng),
-        L.latLng(selected.lat, selected.lng)
+        L.latLng(selected.lat, selected.lng),
       ],
       lineOptions: {
         styles: [
           {
             color: 'blue',
             weight: 5,
-            dashArray: '6, 8'
-          }
-        ]
+            dashArray: '6, 8',
+          },
+        ],
       },
       addWaypoints: false,
       draggableWaypoints: false,
       routeWhileDragging: false,
       createMarker: () => null,
-      position: 'bottomleft'
+      position: 'bottomleft',
     }).addTo(this.map);
-  
   }
-  
 
   userIcon = L.icon({
     iconUrl: 'assets/green-marker.png', // green pin
     iconSize: [35, 35],
     iconAnchor: [17, 35],
-    popupAnchor: [0, -35]
+    popupAnchor: [0, -35],
   });
-  
+
   locateUser(): void {
     if (!this.map) return;
-  
+
     this.isLoading = true;
-  
+
     this.map.locate({ setView: true, maxZoom: 19 });
-  
+
     this.map.once('locationfound', (e: L.LocationEvent) => {
       this.isLoading = false;
-  
+
       // Remove previous user marker
       if (this.userLocationMarker) {
         this.map.removeLayer(this.userLocationMarker);
       }
-  
+
       // OPTIONAL: remove circle if used before
       if (this.userLocationCircle) {
         this.map.removeLayer(this.userLocationCircle);
       }
-  
+
       // Add green user marker
       this.userLocation = e.latlng;
       this.userLocationMarker = L.marker(e.latlng, { icon: this.userIcon })
         .addTo(this.map!)
         .bindPopup('📍 You are here now')
         .openPopup();
-  
     });
-  
+
     this.map.once('locationerror', () => {
       this.isLoading = false;
       alert('❌ Unable to access your location');
