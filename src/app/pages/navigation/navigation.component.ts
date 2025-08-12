@@ -1,6 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, Router } from '@angular/router';
+import { RouterLink, Router, RouterModule } from '@angular/router';
 
 import * as L from 'leaflet'; // First, import Leaflet
 import 'leaflet-routing-machine'; // Then import Leaflet Routing Machine
@@ -17,7 +17,7 @@ L.Icon.Default.mergeOptions({
 @Component({
   selector: 'app-navigation',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.css',
 })
