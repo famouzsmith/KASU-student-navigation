@@ -1,20 +1,24 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "package.json",
-        "use": "@vercel/angular"
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist/student-navigation/browser",
+        "installCommand": "npm install --legacy-peer-deps",
+        "buildCommand": "ng build --configuration production"
       }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/index.html"
-      }
-    ],
-    "build": {
-      "env": {
-        "NPM_FLAGS": "--legacy-peer-deps"
-      }
+    },
+    {
+      "src": "large-assets/*",
+      "use": "@vercel/static"
     }
-  }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)", 
+      "dest": "/index.html"
+    }
+  ]
+}
