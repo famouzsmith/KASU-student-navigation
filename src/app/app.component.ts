@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {CommonModule} from '@angular/common';
-import { ArMapComponent} from './components/ar-map/ar-map.component';
 import { Auth } from '@angular/fire/auth';
 import { inject } from '@angular/core';
 import {NavigationComponent} from './pages/navigation/navigation.component'
