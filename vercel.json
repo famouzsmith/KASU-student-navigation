@@ -7,14 +7,25 @@
       "config": {
         "distDir": "dist/student-navigation/browser",
         "installCommand": "npm install --legacy-peer-deps",
-        "buildCommand": "npx ng build --configuration production"
+        "buildCommand": "ng build --configuration production --base-href /"
       }
     }
   ],
   "routes": [
     {
-      "src": "/(.*)", 
-      "dest": "/index.html"
+      "src": "/_next/static/(.*)",
+      "headers": { "Content-Type": "application/javascript" },
+      "continue": true
+    },
+    {
+      "src": "/(.*\\.js)",
+      "headers": { "Content-Type": "application/javascript" },
+      "continue": true
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html",
+      "headers": { "Cache-Control": "no-cache" }
     }
   ]
 }
