@@ -7,21 +7,14 @@
       "config": {
         "distDir": "dist/student-navigation/browser",
         "installCommand": "npm install --legacy-peer-deps",
-        "buildCommand": "ng build --configuration production"
+        "buildCommand": "npx ng build --configuration production"
       }
     }
   ],
   "routes": [
     {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
+      "src": "/(.*)", 
       "dest": "/index.html"
     }
-  ],
-  "functions": {
-    "maxDuration": 30,
-    "memory": 3008
-  }
+  ]
 }
