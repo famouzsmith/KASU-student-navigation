@@ -7,7 +7,7 @@
       "config": {
         "distDir": "dist/student-navigation/browser",
         "installCommand": "npm install --legacy-peer-deps",
-        "buildCommand": "ng build --configuration production --base-href /"
+        "buildCommand": "ng build --configuration production"
       }
     }
   ],
